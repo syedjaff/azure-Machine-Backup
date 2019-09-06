@@ -1,0 +1,109 @@
+version: '2.1'
+services:
+    redis:
+        image: 'redis:3.2.7'
+        container_name: redis_container
+        restart: always
+        ports:
+            - "6379:6379"
+        # command: redis-server --requirepass redispass
+
+    mysqldb:
+        image: mysql:5.7.22
+        container_name: mysql_container
+        hostname: mysql_host
+        volumes:
+            - /var/lib/app/mysql_container:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: root123
+          MYSQL_DATABASE: airflow_db
+          MYSQL_USER: mysqluser
+          MYSQL_PASSWORD: mysql123
+        command: mysqld --explicit_defaults_for_timestamp
+
+    webserver:
+        image: sample
+        container_name: airflow_webserver
+        restart: always
+        depends_on:
+            - mysqldb
+            - redis
+        environment:
+            - LOAD_EX=n
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            - EXECUTOR=Celery
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            - AIRFLOW__CORE__RESULT_BACKEND=db+mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        volumes:
+            - /home/engsptvm/CeleryAirflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        ports:
+            - "8080:8080"
+        command: webserver
+
+    flower:
+        image: sample
+        container_name: airflow_flower
+        restart: always
+        depends_on:
+            - redis
+        environment:
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            - AIRFLOW__CORE__RESULT_BACKEND=db+mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            # - REDIS_PASSWORD=redispass
+        ports:
+            - "5555:5555"
+        command: flower
+
+    scheduler:
+        image: sample
+        container_name: airflow_scheduler
+        restart: always
+        depends_on:
+            - webserver
+        volumes:
+            - /home/engsptvm/CeleryAirflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            - AIRFLOW__CORE__RESULT_BACKEND=db+mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        command: scheduler
+
+    worker:
+        image: sample
+        container_name: airflow_worker
+        restart: always
+        depends_on:
+            - scheduler
+        volumes:
+            - /home/engsptvm/CeleryAirflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            - AIRFLOW__CORE__SQL_ALCHEMY_CONN=mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            - AIRFLOW__CORE__RESULT_BACKEND=db+mysql://mysqluser:mysql123@mysql_container:3306/airflow_db
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        command: worker

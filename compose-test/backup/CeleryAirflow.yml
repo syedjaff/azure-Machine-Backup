@@ -1,0 +1,121 @@
+version: '2.1'
+services:
+    redis:
+        image: 'redis:3.2.7'
+        container_name: redis_container
+        restart: always
+        ports:
+            - "6379:6379"
+        # command: redis-server --requirepass redispass
+
+    mysqldb:
+        image: mysql:5.7.22
+        container_name: mysql_container
+        hostname: mysql_host
+        volumes:
+            - /var/lib/app/mysql_container:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: root123
+          MYSQL_DATABASE: airflow_db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: mysql123
+        command: mysqld --explicit_defaults_for_timestamp
+
+    webserver:
+        image: syeda01/celeryairflow
+        container_name: airflow_webserver
+        restart: always
+        depends_on:
+            - mysqldb
+            - redis
+        environment:
+            - LOAD_EX=y
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            - EXECUTOR=Celery
+            - AIRFLOW_CONN_AIRFLOW_DB=mysql://root:root123@mysql_container:3306/airflow_db
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        volumes:
+            - /home/engsptvm/docker-airflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        ports:
+            - "8080:8080"
+        command: webserver
+
+    flower:
+        image: syeda01/celeryairflow
+        container_name: airflow_flower
+        restart: always
+        depends_on:
+            - redis
+        environment:
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            #- REDIS_PASSWORD=redispass
+        ports:
+            - "5555:5555"
+        command: flower
+
+    scheduler:
+        image: syeda01/celeryairflow
+        container_name: airflow_scheduler
+        restart: always
+        depends_on:
+            - webserver
+        volumes:
+            - /home/engsptvm/docker-airflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - LOAD_EX=y
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        command: scheduler
+
+    worker1:
+        image: syeda01/celeryairflow
+        container_name: airflow_worker1
+        restart: always
+        depends_on:
+            - scheduler
+        volumes:
+            - /home/engsptvm/docker-airflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        command: worker
+
+    worker2:
+        image: syeda01/celeryairflow
+        container_name: airflow_worker2
+        restart: always
+        depends_on:
+            - scheduler
+        volumes:
+            - /home/engsptvm/docker-airflow/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        environment:
+            - EXECUTOR=Celery
+            - FERNET_KEY=oCBMIgh/IAeTJgLV3RiHdKxYDsTx7Cpo18++sDD5SIc=
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
+        command: worker
