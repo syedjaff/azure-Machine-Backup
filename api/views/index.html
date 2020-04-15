@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TODO APP WebSocket Notifications</title>
+</head>
+
+<body>
+  <h1 style="text-align:center; margin-top: 100px" >TODO Task WebSocket Notifications</h1>
+  <h1>
+    
+</h1>
+<p style="text-align:center; margin-top: 100px">
+    open console to see connection & Notifications
+</p>
+<script>
+    const ws = new WebSocket('ws://localhost:40510')
+    ws.onopen = () => {
+        ws.send('Web Socket Client connected Successfully..')
+    }
+    ws.onmessage = (ev) => {
+		console.log('Notification Received: '+ ev.data)
+    }
+	ws.onclose = () => {
+    console.log("Connection closed");
+};
+
+</script>
+</body>
+</html>

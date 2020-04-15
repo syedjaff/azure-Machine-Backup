@@ -1,0 +1,293 @@
+{
+	"info": {
+		"_postman_id": "12345",
+		"name": "Todo App Backend Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "/register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "en",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Enter Your NAme Here..",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "Enter Your Email Here",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Enter Your PAssword Here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/register",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				
+				{
+					"name": "/login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "Enter Your Email Here",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Enter Your Password Here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/login",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "todos",
+			"item": [
+				{
+					"name": "/todos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/todos",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/todos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Enter Some Text Here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/todos",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				
+				{
+					"name": "/todos/complete",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "Enter Todo Id",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/todos/complete",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos/complete"
+							]
+						}
+					},
+					"response": []
+				},
+				
+				{
+					"name": "/todos/:id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{server}}/todos/Enter Id Here...",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos",
+								"Enter Id Here..."
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/todos/:id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{server}}/todos/Enter Id Here...",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos",
+								"Enter Id Here..."
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/todo/:id",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Enter Some Text Here",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{server}}/todos/Enter Id Here...?",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"todos",
+								"Enter Id Here..."
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

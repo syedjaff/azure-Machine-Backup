@@ -1,0 +1,493 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Todo App Backend Api",
+    "version": "1.0.0",
+    "description": "NodeJs, Express, Passport JWT Auth, Mongoose, Redis, Postman, Swagger"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/auth/register/": {
+      "post": {
+        "description": "Users Registration",
+        "tags": [
+          "Users Authentication"
+        ],
+        "requestBody": {
+          "description": "Registration Data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSchema"
+              },
+              "example": {
+                "name": "developer",
+				"email": "test@mail.com",
+                "password": "12345"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Successfuly Registered",
+            "content": {
+              "appication/json": {
+                "example": {
+                  "message": "You Have Registered Successfully"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Registration Failed",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Email Already Exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login/": {
+      "post": {
+        "description": "Users Logins",
+        "tags": [
+          "Users Authentication"
+        ],
+        "requestBody": {
+          "description": "login Data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSchema"
+              },
+              "example": {
+                "email": "test@mail.com",
+                "password": "12345"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User Successfuly Logged In",
+            "headers": {
+              "Authorization": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "JWT token"
+              }
+            },
+            "content": {
+              "appication/json": {
+                "example": {
+                  "message": "Login Success!"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Logged In, Invalid Credentials",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Invalid Credentials"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+	
+	"todos": {
+      "get": {
+        "description": "Get All Todo Items In Database",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An Array of Todos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Todos"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+	  
+      "post": {
+        "description": "Create new Todo",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Todo Creation Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoSchema"
+              },
+              "example": {
+                "name": "First Todo"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Return Created Todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TodoSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+	
+	
+	"todos/complete": {
+      
+      "post": {
+        "description": "Complete new Todo",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Todo Completion Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TodoSchema"
+              },
+              "example": {
+                "id": "jhfjdhdjfsdljl668868"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Return Completed Todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TodoSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+	
+	
+	
+    "todos/{id}": {
+      
+	  "get": {
+        "description": "Get Todo by todoId",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The Unique TodoId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return Todo By Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TodoSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+	  
+      "patch": {
+        "description": "Update Todo By TodoId",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The Unique TodoId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return Updated Todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TodoSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+	  
+	  "delete": {
+        "description": "Delete Todo By TodoId",
+        "tags": [
+          "Todos"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The Unique TodoId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return Deleted Todo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TodoSchema"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  
+  "components": {
+    "schemas": {
+      
+	  "UserSchema": {
+        "required": [
+          "name",
+		  "email",
+		  "password"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "array"
+          }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserSchema"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "status",
+          "message"
+        ],
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "HTTP status code",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "description": "Error description",
+            "example": "User created"
+          }
+        }
+      },
+	  
+	  "TodoSchema": {
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "tokens": {
+            "type": "array"
+          }
+        }
+      },
+      "Todos": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TodoSchema"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "status",
+          "message"
+        ],
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "HTTP Status Code",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "description": "Error Description",
+            "example": "Todo Created"
+          }
+        }
+      }
+	  
+	  
+    },
+	
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": []
+}

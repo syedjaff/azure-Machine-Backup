@@ -1,0 +1,10 @@
+{
+  "registration": {
+    "SUBJECT": "Registration Confirm Email",
+    "MESSAGE": "<p>Hello %s.</p> <p>Your SignUp Successful.</p> <p>Thank you.</p>"
+  },
+  "todoTask": {
+    "SUBJECT": "Todo Task Creation Email",
+    "MESSAGE": "<p>Your Todo Task Created Successfully</p> <p>Thank you.</p>"
+  }
+}
