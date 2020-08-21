@@ -1,0 +1,7 @@
+curl -f -k -H 'Content-Type: application/json' -d '{"extra_vars":{"runtime_var":"hi"}}' -XPOST --user 'admin:adminpass@123' http://104.211.206.68:8800/api/v2/job_templates/7/launch/
+
+curl -H "Authorization: Bearer p3DWqvuyYtYnb9KEIiRtY5j3Gh6ERZ" -d '{"extra_vars":{"runtime_var":"hi"}}' -X POST http://104.211.206.68:8800/api/v2/job_templates/7/launch/
+
+FROM RUNDECK:
+
+curl -f -k -H 'Content-Type: application/json' -d '{"extra_vars":{"runtime_var":"'"$1"'"}}' -XPOST --user 'admin:adminpass@123' http://104.211.206.68:8800/api/v2/job_templates/7/launch/

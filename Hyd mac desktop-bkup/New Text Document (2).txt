@@ -1,0 +1,33 @@
+curl -L -k https://dsm.cathaypacific.com:9211/encrypt -d "password=QW!@op90"
+
+
+git clone https://SPNALRJ:dC8o1syZbd7sRawxwQXz@git.cathaypacific.com/oscarast/onscgo-bot-script.git
+https://jenkins.cathaypacific.com/job/domain/job/oscarast/job/standard/
+
+TVMATP385783D
+
+				ETECHLOG
+				--------
+Database queries	-	pending-um-count
+
+server metrices		-	cpu&memory usage	-	server1-env
+							-	server2-env
+							-	server3-env
+			-	disk space		-	server1-env
+							-	server2-env
+							-	server3-env
+
+application		-	url health		-	server1-env
+							-	server2-env
+							-	server3-env
+			-	process check		-	server1-env
+							-	server2-env
+							-	server3-env
+			-	log search		-	server1-env
+							-	server2-env
+							-	server3-env
+			-	recent logs		-	server1-env
+							-	server2-env
+							-	server3-env
+
+helpme			-	decription of functions

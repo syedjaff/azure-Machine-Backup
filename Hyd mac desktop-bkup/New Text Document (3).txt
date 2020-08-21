@@ -1,0 +1,16 @@
+104.197.89.53:4000/triggerscript
+10.212.20.27:4000/triggerscript
+
+hubot-app-environments-p0-908d8e42852d538788b7e7f96de12073e39055e5\src\routes\bot.js*
+hubot-app-environments-p0-908d8e42852d538788b7e7f96de12073e39055e5\src\routes\welcome_card.js*
+hubot-app-environments-p0-908d8e42852d538788b7e7f96de12073e39055e5\src\services\etechlog\pending_um.js
+d0	hubot-app/d0/deploy	#359
+
+hubot-script-environments-p0-0ceea65a4dc1f827d4e3198b39f685580d00c712\src\routes\index.js*
+hubot-script-environments-p0-0ceea65a4dc1f827d4e3198b39f685580d00c712\src\routes\etechlog\db_queries.js
+d0
+
+
+bot-response-development-7e8561891c8ecb229a8c4f71e7ed954fb41d4530\src\bot_responses\etechlog-support.js
+bot-response-development-7e8561891c8ecb229a8c4f71e7ed954fb41d4530\src\health_checks\0664-Etechlog.js
+development
